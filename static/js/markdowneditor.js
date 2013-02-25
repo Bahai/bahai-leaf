@@ -1,6 +1,6 @@
 (function ($) {
   //filepicker
-	filepicker.setKey('SET_FILEPICKER_API_KEY_HERE');
+	filepicker.setKey('AIaHtciRWquWCN8NDGiJQz');
 	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
