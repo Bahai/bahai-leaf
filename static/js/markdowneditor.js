@@ -159,21 +159,28 @@
             });
           } else {
               var new_filename = $('#new-filename').val();
-              var new_filepath = $('#new-filepath').val();
               var opts = {
                   location: 'DROPBOX',
-                  path: new_filepath,
                   filename: new_filename,
                   base64decode: false
               }
-              if(new_filename && new_filepath){
+              if(new_filename){
                   filepicker.store($('#editor').val(), opts, function(fpfile){
-                      console.log(fpfile);
+                      var ex_opts = {
+                          service: 'DROPBOX',
+                          openTo: 'DROPBOX',
+                          suggestedFilename: new_filename,
+                          extension: '.md'
+                      }
+                      filepicker.exportFile(fpfile, ex_opts, function(fp){
+                          $('.filename h5').text(fp.filename);
+                          $('.filename').show()
+                          $('#new-file-form').hide();
+                      });
                   });
               } else {
                   $('#new-file-form form').append('<span class="help-inline"><strong>Please name your file and provide a path where it can be saved in Dropbox</strong></span>')
               }
-              console.log('attempting to make new file');
           }
   	  });
     };
