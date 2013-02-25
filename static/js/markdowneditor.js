@@ -136,7 +136,7 @@
 	$.markdownEditor.filepicker.target = null;
 	$.markdownEditor.filepicker.clickHandlers = function(){
 	  $(".me-open").click(function(){
-  		filepicker.getFile(filepicker.MIMETYPES.TEXT,function(url, data) {
+  		filepicker.getFile(filepicker.MIMETYPES.ALL,function(url, data) {
     	  $.markdownEditor.filepicker.target = data;
           $('title').prepend($.markdownEditor.filepicker.target.name + " ");
           $('#filename').html($.markdownEditor.filepicker.target.name);
