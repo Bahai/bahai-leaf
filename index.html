@@ -9,12 +9,20 @@
 	<body>
   		<div class="container-fluid">
             <div class="row-fluid">
-    		<h1 id="branding">MarkPad <small>A simple editor for complex ideas</small>
-            </h1>
+    		<h1 id="branding">Leaf</h1>
       </div>
   		<div class="row-fluid">
   		  <div id="source" class="span6">
-      		<div id="toolbar"></div>
+                <div id="toolbar"></div>
+                <div class="filename" style="display:none;">
+                    <h5></h5>
+                </div>
+                <div id="new-file-form">
+                    <form class="form-inline">
+                        <input type="text" id="new-filename" class="input-medium" placeholder="File name"/>
+                        <input type="text" id="new-filepath" class="input-medium" placeholder="File path"/>
+                    </form>
+                </div>
       		<textarea rows="20" cols="80" id="editor"># What is this?
 
 This is a text editor.
@@ -43,14 +51,10 @@ It can be simple like **Bold** or *Italics*, lists like above, headings, or even
       	</div>
       </div>
     </div>
-
-
-
-
     <div class="navbar navbar-fixed-bottom">
   <div class="navbar-inner">
   		<div class="container-fluid">
-        <div id="filename" class="span6">New File (Unsaved)</div>
+        <div class="filename span6">New File (Unsaved)</div>
         <div class="span6">Statistics
         <span id="stat" style="padding-left:20px"></span>
         </div>

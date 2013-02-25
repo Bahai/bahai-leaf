@@ -133,26 +133,48 @@
 	}
 	$.markdownEditor.filepicker = {};
 	$.markdownEditor.filepicker.target = null;
+    var current_file = null;
 	$.markdownEditor.filepicker.clickHandlers = function(){
 	  $(".me-open").click(function(){
   		filepicker.pick({
             extensions: ['.md'],
             container: 'modal',
-            service: 'DROPBOX'
+            services: ['DROPBOX']
         },function(fpfile) {
-            console.log(fpfile);
-            filepicker.read(fpfile, function(data){
-                console.log(data);
-                $.markdownEditor.filepicker.target = data;
-                $('title').prepend($.markdownEditor.filepicker.target.name + " ");
-                $('#filename').html($.markdownEditor.filepicker.target.name);
+            filepicker.read(fpfile,{asText: true, base64encode: false}, function(data){
+                $('#editor').val(data);
+                current_file = fpfile;
+                $('title').prepend(fpfile.filename + " ");
+                $('.filename h5').html(fpfile.filename);
+                preview();
   		    });
         });
       });
       $(".me-savemd").click(function(){
-        filepicker.getUrlFromData($("#editor").val(), function(dataUrl){
-            filepicker.saveAs(dataUrl, {'modal': true}, function(dataUrl) {console.log("save md as " + dataUrl);});
-           });
+          if(current_file){
+              filepicker.write(current_file, $('#editor').val(), function(fpfile){
+                  console.log('file written');
+            }, function(error){
+                  console.log(error);
+            });
+          } else {
+              var new_filename = $('#new-filename').val();
+              var new_filepath = $('#new-filepath').val();
+              var opts = {
+                  location: 'DROPBOX',
+                  path: new_filepath,
+                  filename: new_filename,
+                  base64decode: false
+              }
+              if(new_filename && new_filepath){
+                  filepicker.store($('#editor').val(), opts, function(fpfile){
+                      console.log(fpfile);
+                  });
+              } else {
+                  $('#new-file-form form').append('<span class="help-inline"><strong>Please name your file and provide a path where it can be saved in Dropbox</strong></span>')
+              }
+              console.log('attempting to make new file');
+          }
   	  });
     };
 	$.markdownEditor.filepicker.update = function(){
