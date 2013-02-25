@@ -1,6 +1,6 @@
 (function ($) {
   //filepicker
-	filepicker.setKey('SET_FILEPICKER_API_KEY_HERE');
+	filepicker.setKey('AIaHtciRWquWCN8NDGiJQz');
 	
 	function h(q) {
 		return function(c) {c.prependToLeadingLine((new Array(q+1)).join('#')+' ');};
@@ -25,7 +25,6 @@
 		buttons: {
 			'open' : {'name': '<i class="icon-folder-open icon-white"></i> Open', 'icon':'', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
 			'savemd' : {'name': 'Save Source', 'icon':'share', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
-			'savehtml' : {'name': 'Save HTML', 'icon':'share-alt', 'btn_class':'btn-primary', 'icon_class':'icon-white', callback: function(){}},
 
 			'h1' : {'name': 'H1', 'icon':'', callback: h(1)},
 			'h2' : {'name': 'H2', 'icon':'', callback: h(2)},
@@ -43,7 +42,7 @@
 			'outdent': {'name': 'Outdent', 'icon':'indent-right', callback: function (caret) {caret.replaceInSelection(/[ ]{4}(?![ ]{4})/g, "");}}
 		},
 		toolbars: {
-			'default': [['open', 'savemd', 'savehtml'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
+			'default': [['open', 'savemd'],['h1','h2','h3'], ['bold','italic'], ['link'], ['quote', 'code'], ['hr']]
 		}
 	};
 	$.fn.markdownEditor = function (opts) {
@@ -136,26 +135,24 @@
 	$.markdownEditor.filepicker.target = null;
 	$.markdownEditor.filepicker.clickHandlers = function(){
 	  $(".me-open").click(function(){
-  		filepicker.getFile(filepicker.MIMETYPES.TEXT,function(url, data) {
-    	  $.markdownEditor.filepicker.target = data;
-          $('title').prepend($.markdownEditor.filepicker.target.name + " ");
-          $('#filename').html($.markdownEditor.filepicker.target.name);
-  		  $.ajax({ url: url,
-  		          success: function(data){
-  		            $("#editor").html(data);
-  		            preview();
-  		          }});
-  		});
+  		filepicker.pick({
+            extensions: ['.md'],
+            container: 'modal',
+            service: 'DROPBOX'
+        },function(fpfile) {
+            console.log(fpfile);
+            filepicker.read(fpfile, function(data){
+                console.log(data);
+                $.markdownEditor.filepicker.target = data;
+                $('title').prepend($.markdownEditor.filepicker.target.name + " ");
+                $('#filename').html($.markdownEditor.filepicker.target.name);
+  		    });
+        });
       });
       $(".me-savemd").click(function(){
         filepicker.getUrlFromData($("#editor").val(), function(dataUrl){
-            filepicker.saveAs(dataUrl, 'text/plain', {'modal': true}, function(dataUrl) {console.log("save md as " + dataUrl);});
+            filepicker.saveAs(dataUrl, {'modal': true}, function(dataUrl) {console.log("save md as " + dataUrl);});
            });
-  	  });
-      $(".me-savehtml").click(function(){
-        filepicker.getUrlFromData($("#preview").html(), function (dataUrl){
-            filepicker.saveAs(dataUrl, 'text/html', {'modal': true}, function(dataUrl) {console.log("save html as " + dataUrl);});
-        });
   	  });
     };
 	$.markdownEditor.filepicker.update = function(){
